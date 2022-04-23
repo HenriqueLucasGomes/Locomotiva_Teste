@@ -12,7 +12,6 @@ builder.Services.AddControllers();
 // Início conexão com o banco de dados   
 string stringDeConexao = builder.Configuration.GetConnectionString("conexaoMySQL");
 builder.Services.AddDbContext<DataContext>(opt => opt.UseMySql(stringDeConexao, ServerVersion.AutoDetect(stringDeConexao)));
-// builder.Services.AddDbContext<DataContext>(opt => opt.UseMySql(stringDeConexao2, ServerVersion.AutoDetect(stringDeConexao2)));
 // Término da conexão com o banco de dados
 
 //builder.Services.AddSwaggerGen(c =>
