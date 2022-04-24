@@ -1,8 +1,20 @@
+using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using api.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using api.Models;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.ComponentModel.DataAnnotations;
+
+
+
+// using System.Web.Http.Filters;
+
+
 
 namespace api.Controllers
 {
@@ -12,6 +24,7 @@ namespace api.Controllers
     {
         
         private DataContext dc;
+        
 
         public ModelosController(DataContext context)
         {
@@ -28,18 +41,24 @@ namespace api.Controllers
         }
 
         [HttpPost("CadFunc")]
-        public async Task<ActionResult> cadastrarFuncionario([FromBody] Equipes e)
+        public async Task<ActionResult> cadastrarFuncionario([FromBody] Funcionarios f)
         {
-            dc.equipes.Add(e);
-            await dc.SaveChangesAsync();
-
-            return Created("",e);
+            if(f.Email==""){
+                return Problem("Campo 'Email' se encontra vazio","",500,"Email Vazio","Inconsistência no Registro");
+            }else if(new EmailAddressAttribute().IsValid(f.Email)){
+                dc.funcionarios.Add(f);
+                await dc.SaveChangesAsync();
+                return Created("",f);                
+            }
+            else{
+                return Problem("Formato de Email fora do padrão","",500,"Email Inválido","Inconsistência no Registro");
+            }
+           
         }
         
         [HttpGet("ListEqup")]
         public async Task<ActionResult> listarEquipes()
         {
-            
             var dados=await dc.equipes.ToListAsync();
             return Ok(dados);
         }
@@ -47,7 +66,7 @@ namespace api.Controllers
         [HttpGet("ListFunc")]
         public async Task<ActionResult> listarFuncionarios()
         {
-            var dados=await dc.equipes.ToListAsync();
+            var dados=await dc.funcionarios.ToListAsync();
             return Ok(dados);
         }
     }
