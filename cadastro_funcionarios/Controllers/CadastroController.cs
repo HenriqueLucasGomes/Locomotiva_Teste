@@ -1,20 +1,12 @@
+using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using api.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using api.Models;
-using System;
-using System.Net;
-using System.Net.Http;
-using System.ComponentModel.DataAnnotations;
-
-
-
-// using System.Web.Http.Filters;
-
-
+using api.Data;
 
 namespace api.Controllers
 {
@@ -24,7 +16,6 @@ namespace api.Controllers
     {
         
         private DataContext dc;
-        
 
         public ModelosController(DataContext context)
         {
@@ -36,7 +27,6 @@ namespace api.Controllers
         {
             dc.equipes.Add(e);
             await dc.SaveChangesAsync();
-
             return Created("",e);
         }
 
